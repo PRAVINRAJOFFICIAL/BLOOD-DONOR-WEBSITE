@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BloodCare Connect</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-badge">+</div>
+          <div>
+            <p class="eyebrow">BloodCare Connect</p>
+            <h1>Smart Blood Network</h1>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <button class="nav-btn active" data-section="home">Home</button>
+          <button class="nav-btn" data-section="donors">Donors</button>
+          <button class="nav-btn" data-section="requests">Requests</button>
+          <button class="nav-btn" data-section="dashboard">Dashboard</button>
+          <button class="nav-btn" data-section="search">Search</button>
+          <button class="nav-btn" data-section="compatibility">Compatibility</button>
+          <button class="nav-btn" data-section="profile">Profile</button>
+          <button class="nav-btn" data-section="about">About</button>
+          <button class="nav-btn" data-section="contact">Contact</button>
+          <button class="nav-btn auth-btn" id="loginBtn">Login</button>
+          <div id="userMenu" class="user-menu hidden">
+            <button class="profile-chip" id="profileChip">
+              <span id="profileAvatar">U</span>
+              <span>
+                <strong id="profileUserName">User</strong>
+                <small id="profileUserEmail">email</small>
+              </span>
+            </button>
+            <button class="nav-btn logout-btn" id="logoutBtn">Logout</button>
+          </div>
+          <button class="theme-toggle" id="themeToggle">🌙</button>
+        </nav>
+      </header>
+
+      <div id="appMessage" class="app-message" role="status"></div>
+
+      <main>
+        <section id="home" class="section active">
+          <div class="hero-grid">
+            <div class="hero-content glass-card">
+              <p class="eyebrow">Emergency Response</p>
+              <h2>Save lives with a trusted blood network</h2>
+              <p class="hero-text">Connect hospitals, donors, and families in real time with fast coordination and verified availability.</p>
+              <div class="hero-actions">
+                <button class="btn btn-primary" data-section="requests">Create Request</button>
+                <button class="btn btn-secondary" data-section="donors">Register Donor</button>
+              </div>
+              <div class="hero-stats">
+                <div>
+                  <strong id="heroDonorCount">0</strong>
+                  <span>Available Donors</span>
+                </div>
+                <div>
+                  <strong id="heroRequestCount">0</strong>
+                  <span>Open Requests</span>
+                </div>
+                <div>
+                  <strong id="heroUserCount">0</strong>
+                  <span>Active Users</span>
+                </div>
+              </div>
+            </div>
+            <div class="hero-visual glass-card">
+              <div class="hero-visual-ring"></div>
+              <div class="hero-bubble main-card">
+                <span>Critical Needs</span>
+                <strong>12 Cases</strong>
+                <small>updated just now</small>
+              </div>
+              <div class="hero-bubble mini-card one">
+                <span>O+ Donors</span>
+                <strong>48</strong>
+              </div>
+              <div class="hero-bubble mini-card two">
+                <span>AB- Needed</span>
+                <strong>3</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="awareness-grid">
+            <div class="glass-card awareness-card">
+              <h3>Why donation matters</h3>
+              <p>Every donation can support surgeries, emergencies, and long-term care for patients across the city.</p>
+            </div>
+            <div class="glass-card awareness-card highlight">
+              <h3>Fast alerts</h3>
+              <p>Hospitals and coordinators can identify and contact the right donors quickly.</p>
+            </div>
+            <div class="glass-card awareness-card">
+              <h3>Community support</h3>
+              <p>Build stronger local healthcare access with trusted, transparent donor matching.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="donors" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Donor Management</p>
+              <h2>Donor Registration</h2>
+            </div>
+            <div class="section-tools">
+              <input type="search" id="donorSearchInput" placeholder="Search donors" />
+            </div>
+          </div>
+          <div class="glass-card form-card">
+            <form id="donorForm">
+              <input type="hidden" name="donorId" />
+              <div class="form-grid donor-form-grid">
+                <div>
+                  <label>Full Name</label>
+                  <input type="text" name="donor_name" required />
+                </div>
+                <div>
+                  <label>Mobile Number</label>
+                  <input type="tel" name="phone" required />
+                </div>
+                <div>
+                  <label>Blood Group</label>
+                  <select name="blood_group" required>
+                    <option value="">Select</option>
+                    <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Gender</label>
+                  <select name="gender" required>
+                    <option value="">Select</option>
+                    <option>Male</option><option>Female</option><option>Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Age</label>
+                  <input type="number" name="age" min="18" max="65" required />
+                </div>
+                <div>
+                  <label>City</label>
+                  <input type="text" name="city" required />
+                </div>
+                <div>
+                  <label>Location</label>
+                  <input type="text" name="district" />
+                </div>
+                <div>
+                  <label>Address</label>
+                  <input type="text" name="address" required />
+                </div>
+                <div>
+                  <label>Last Donation Date</label>
+                  <input type="date" name="last_donation_date" />
+                </div>
+                <div>
+                  <label>Availability</label>
+                  <select name="availability_status" required>
+                    <option>Available</option>
+                    <option>Busy</option>
+                    <option>Recently Donated</option>
+                    <option>Unavailable</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Donor</button>
+                <button type="button" class="btn btn-secondary" id="cancelDonorEdit">Cancel</button>
+              </div>
+            </form>
+          </div>
+          <div id="donorList" class="table-wrap"></div>
+        </section>
+
+        <section id="requests" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Blood Requests</p>
+              <h2>Emergency Request Center</h2>
+            </div>
+          </div>
+          <div id="alertBanner" class="alert-banner"></div>
+          <div class="glass-card form-card">
+            <form id="requestForm">
+              <input type="hidden" name="requestId" />
+              <div class="form-grid request-form-grid">
+                <div>
+                  <label>Patient Name</label>
+                  <input type="text" name="patient_name" required />
+                </div>
+                <div>
+                  <label>Blood Group Needed</label>
+                  <select name="blood_group_needed" required>
+                    <option value="">Select</option>
+                    <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Hospital Name</label>
+                  <input type="text" name="hospital_name" required />
+                </div>
+                <div>
+                  <label>Contact Number</label>
+                  <input type="tel" name="contact_number" required />
+                </div>
+                <div>
+                  <label>Units Required</label>
+                  <input type="number" name="units_required" min="1" required />
+                </div>
+                <div>
+                  <label>Emergency Level</label>
+                  <select name="emergency_level" required>
+                    <option>Critical</option>
+                    <option>High</option>
+                    <option>Medium</option>
+                  </select>
+                </div>
+                <div>
+                  <label>City</label>
+                  <input type="text" name="city" required />
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+                <button type="button" class="btn btn-secondary" id="cancelRequestEdit">Cancel</button>
+              </div>
+            </form>
+          </div>
+          <div id="requestList" class="request-list"></div>
+        </section>
+
+        <section id="dashboard" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Analytics</p>
+              <h2>Hospital Dashboard</h2>
+            </div>
+          </div>
+          <div class="metric-grid">
+            <div class="glass-card metric-card"><span>Total Donors</span><strong id="metricDonors">0</strong></div>
+            <div class="glass-card metric-card"><span>Active Donors</span><strong id="metricActive">0</strong></div>
+            <div class="glass-card metric-card"><span>Total Requests</span><strong id="metricRequests">0</strong></div>
+            <div class="glass-card metric-card"><span>Emergency Requests</span><strong id="metricEmergency">0</strong></div>
+          </div>
+          <div class="dashboard-layout">
+            <div class="glass-card">
+              <h3>Blood Group Distribution</h3>
+              <div id="distributionChart" class="chart"></div>
+            </div>
+            <div class="glass-card">
+              <h3>Monthly Donations</h3>
+              <div id="monthlyChart" class="monthly-chart"></div>
+            </div>
+          </div>
+          <div class="dashboard-layout second-row">
+            <div class="glass-card">
+              <h3>Recent Requests</h3>
+              <div id="activityFeed" class="activity-feed"></div>
+            </div>
+            <div class="glass-card">
+              <h3>Registered Users</h3>
+              <div id="userManagement" class="user-management"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="search" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Smart Search</p>
+              <h2>Find Donors</h2>
+            </div>
+          </div>
+          <div class="glass-card search-panel">
+            <div class="search-controls">
+              <select id="searchBlood">
+                <option value="">All Blood Groups</option>
+                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+              </select>
+              <select id="searchCity">
+                <option value="">All Cities</option>
+              </select>
+              <select id="searchDistrict">
+                <option value="">All Districts</option>
+              </select>
+              <select id="searchAvailability">
+                <option value="">All Status</option>
+                <option>Available</option>
+                <option>Busy</option>
+                <option>Recently Donated</option>
+                <option>Unavailable</option>
+              </select>
+              <button id="sortNearestBtn" class="btn btn-secondary">Sort by Nearest</button>
+              <button id="locateBtn" class="btn btn-secondary">Use My Location</button>
+            </div>
+            <div id="searchResults" class="search-results"></div>
+          </div>
+        </section>
+
+        <section id="compatibility" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Compatibility</p>
+              <h2>Blood Compatibility Checker</h2>
+            </div>
+          </div>
+          <div class="glass-card compatibility-panel">
+            <div class="compatibility-controls">
+              <select id="compatibilityDonor">
+                <option value="">Select donor group</option>
+              </select>
+              <select id="compatibilityRecipient">
+                <option value="">Select recipient group</option>
+              </select>
+            </div>
+            <div id="compatibilityResult" class="compatibility-result"></div>
+            <div class="compatibility-grid">
+              <div>
+                <h3>Compatible Donors</h3>
+                <div id="compatibleDonors" class="compatibility-list"></div>
+              </div>
+              <div>
+                <h3>Compatible Recipients</h3>
+                <div id="compatibleRecipients" class="compatibility-list"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="profile" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Profile</p>
+              <h2>Your Donor Profile</h2>
+            </div>
+          </div>
+          <div id="profileContent" class="profile-layout"></div>
+        </section>
+
+        <section id="about" class="section">
+          <div class="glass-card about-card">
+            <p class="eyebrow">About Project</p>
+            <h2>Built for real-world blood coordination</h2>
+            <p>This platform connects donors, hospitals, and patients in a secure, user-friendly environment for faster, more reliable healthcare response.</p>
+          </div>
+        </section>
+
+        <section id="contact" class="section">
+          <div class="glass-card contact-card">
+            <p class="eyebrow">Contact</p>
+            <h2>Need support or collaboration?</h2>
+            <p>Email: pravinraj02032007@gmail.com</p>
+            <p>Phone: +91 9363237647</p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>© 2026 BloodCare Connect · Smart Blood Donation Platform</p>
+      </footer>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="supabase.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
