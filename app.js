@@ -423,20 +423,26 @@ function renderDonorList() {
     })
     .map((donor) => `
       <tr>
-        <td><strong>${donor.donor_name}</strong><br><small>${donor.age} yrs</small></td>
-        <td>${donor.blood_group}</td>
-        <td>${donor.city}</td>
-        <td>${donor.district || '—'}</td>
-        <td>${donor.availability_status}</td>
-        <td>${state.session ? donor.phone : maskPhone(donor.phone)}</td>
         <td>
-          <div class="table-actions">
-            <button class="btn btn-small btn-secondary" onclick="editDonor('${donor.id}')">Edit</button>
-            <button class="btn btn-small btn-secondary" onclick="toggleAvailability('${donor.id}')">Toggle</button>
-            <button class="btn btn-small btn-secondary" onclick="showDonorCard('${donor.id}')">Card</button>
-            <button class="btn btn-small btn-danger" onclick="deleteDonor('${donor.id}')">Delete</button>
-          </div>
-        </td>
+<div class="table-actions">
+${donor.user_id === state.session?.user?.id ? `
+<button class="btn btn-small btn-secondary"
+onclick="editDonor('${donor.id}')">Edit</button>
+
+<button class="btn btn-small btn-secondary"
+onclick="toggleAvailability('${donor.id}')">Toggle</button>
+
+<button class="btn btn-small btn-secondary"
+onclick="showDonorCard('${donor.id}')">Card</button>
+
+<button class="btn btn-small btn-danger"
+onclick="deleteDonor('${donor.id}')">Delete</button>
+` : `
+<button class="btn btn-small btn-secondary"
+onclick="showDonorCard('${donor.id}')">Card</button>
+`}
+</div>
+</td>
       </tr>
     `)
     .join('');
